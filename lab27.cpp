@@ -37,32 +37,47 @@ int main() {
         if (!(cin >> choice)) {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Invalid choice.\n\n";
+            cout << "Invalid choice. Please enter a number from 1 to 4.\n\n";
             continue;
         }
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-        if (choice == 3) {
+        if (choice >= 1 && choice <= 3) {
             string name;
             cout << "Enter the villager's name: ";
             getline(cin, name);
 
             auto it = villagers.find(name);
-            if (it != villagers.end()) {
+            if (it == villagers.end()) {
+                cout << name << " was not found.\n";
+            } else if (choice == 1) {
+                int& friendship = get<0>(it->second);
+                if (friendship < 10) {
+                    ++friendship;
+                    cout << name << "'s friendship increased to "
+                         << friendship << ".\n";
+                } else {
+                    cout << name << " is already at the maximum friendship level.\n";
+                }
+            } else if (choice == 2) {
+                int& friendship = get<0>(it->second);
+                if (friendship > 0) {
+                    --friendship;
+                    cout << name << "'s friendship decreased to "
+                         << friendship << ".\n";
+                } else {
+                    cout << name << " is already at the minimum friendship level.\n";
+                }
+            } else {
                 cout << "Villager found:\n";
                 displayVillager(it->first, it->second);
-            } else {
-                cout << name << " was not found.\n";
             }
-            displayVillagers(villagers);
-        } else if (choice == 1 || choice == 2) {
-            // TODO: Implement friendship increase and decrease operations.
-            cout << "Friendship update is not implemented yet.\n";
+
             displayVillagers(villagers);
         } else if (choice == 4) {
             cout << "Goodbye!\n";
         } else {
-            cout << "Invalid choice.\n\n";
+            cout << "Invalid choice. Please enter a number from 1 to 4.\n\n";
         }
     }
 
